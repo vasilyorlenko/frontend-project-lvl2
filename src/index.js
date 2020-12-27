@@ -4,7 +4,7 @@ import getParser from './parsers.js';
 import getFormatter from './formatters/index.js';
 
 const buildDiff = (parsedConfig1, parsedConfig2) => {
-  const keys = _.union(_.keys(parsedConfig1), _.keys(parsedConfig2)).sort();
+  const keys = _.sortBy(_.union(_.keys(parsedConfig1), _.keys(parsedConfig2)));
 
   const diff = keys.map((key) => {
     if (!_.has(parsedConfig2, key)) {
