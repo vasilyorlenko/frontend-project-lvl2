@@ -1,6 +1,6 @@
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
-import { promises as fs } from 'fs';
+import fs from 'fs';
 import genDiff from '../src/index.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -18,37 +18,20 @@ const testCases = [
   ['json', 'json', 'json'],
 ];
 
-const expected = {};
-
-beforeAll(async () => {
-  expected.stylish = (
-    await fs.readFile(getFixturePath('stylish.txt'), 'utf-8')
-  ).trim();
-  expected.plain = (
-    await fs.readFile(getFixturePath('plain.txt'), 'utf-8')
-  ).trim();
-  expected.json = (
-    await fs.readFile(getFixturePath('json.txt'), 'utf-8')
-  ).trim();
-});
-
 test.each(testCases)('genDiff (%s, %s) [format: %s]', (type1, type2, format) => {
-  const file1path = getFixturePath(`file1.${type1}`);
-  const file2path = getFixturePath(`file2.${type2}`);
-
-  expect(genDiff(file1path, file2path, format)).toBe(expected[format]);
+  expect(
+    genDiff(getFixturePath(`file1.${type1}`), getFixturePath(`file2.${type2}`), format),
+  ).toBe(fs.readFileSync(getFixturePath(`${format}.txt`), 'utf-8').trim());
 });
 
 test('default format', () => {
-  const file1path = getFixturePath('file1.json');
-  const file2path = getFixturePath('file2.json');
-
-  expect(genDiff(file1path, file2path)).toBe(expected.stylish);
+  expect(
+    genDiff(getFixturePath('file1.json'), getFixturePath('file2.json')),
+  ).toBe(fs.readFileSync(getFixturePath('stylish.txt'), 'utf-8').trim());
 });
 
 test('invalid format', () => {
-  const file1path = getFixturePath('file1.json');
-  const file2path = getFixturePath('file2.json');
-
-  expect(() => genDiff(file1path, file2path, 'wrong')).toThrow();
+  expect(
+    () => genDiff(getFixturePath('file1.json'), getFixturePath('file2.json'), 'wrong'),
+  ).toThrow();
 });
