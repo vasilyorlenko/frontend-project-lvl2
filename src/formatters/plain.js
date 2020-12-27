@@ -4,10 +4,8 @@ const formatValue = (value) => {
   if (_.isObject(value)) {
     return '[complex value]';
   }
-  if (typeof value === 'string') {
-    return `'${value}'`;
-  }
-  return value;
+
+  return _.isString(value) ? `'${value}'` : value;
 };
 
 export default (diff) => {
