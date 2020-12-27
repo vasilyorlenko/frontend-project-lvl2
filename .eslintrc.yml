@@ -1,0 +1,19 @@
+---
+
+plugins:
+  - jest
+
+env:
+  node: true
+
+parserOptions:
+  ecmaVersion: 2020
+
+extends:
+  - 'airbnb-base'
+  - 'plugin:jest/recommended'
+
+rules:
+  no-console: 0
+  import/extensions: 0
+  no-underscore-dangle: [2, { allow: [__filename, __dirname] }]
