@@ -1,14 +1,13 @@
 import _ from 'lodash';
 
 const formatValue = (value) => {
-  switch (typeof value) {
-    case 'object':
-      return '[complex value]';
-    case 'string':
-      return `'${value}'`;
-    default:
-      return value;
+  if (_.isObject(value)) {
+    return '[complex value]';
   }
+  if (typeof value === 'string') {
+    return `'${value}'`;
+  }
+  return value;
 };
 
 export default (diff) => {
